@@ -5,6 +5,7 @@ What's New
 Ver 3.3.0 (unreleased)
 ======================
 - Fixed an issue with image rotation when OpenCv is installed
+- Added internal support for dask and zarr arrays
 
 Ver 3.2.0 (2021-06-07)
 ======================
