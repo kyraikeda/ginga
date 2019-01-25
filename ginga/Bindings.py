@@ -940,7 +940,7 @@ class ImageViewBindings(object):
                 viewer.onscreen_message("Color map: %s" % (cmapname),
                                         delay=1.0)
 
-    def _reset_cmap(self, viewer, msg):
+    def _to_default_cmap(self, viewer, msg):
         if self.cancmap:
             msg = self.settings.get('msg_cmap', msg)
             # default
@@ -1374,12 +1374,6 @@ class ImageViewBindings(object):
                 viewer.onscreen_message('Autocenter Override', delay=1.0)
         return True
 
-    def kp_contrast_restore(self, viewer, event, data_x, data_y, msg=True):
-        if self.cancmap:
-            msg = self.settings.get('msg_cmap', msg)
-            self.restore_contrast(viewer, msg=msg)
-        return True
-
     def kp_flip_x(self, viewer, event, data_x, data_y, msg=True):
         if self.canflip:
             msg = self.settings.get('msg_transform', msg)
@@ -1440,12 +1434,25 @@ class ImageViewBindings(object):
         self._cycle_dist(viewer, msg, direction='down')
         return True
 
+    def kp_contrast_restore(self, viewer, event, data_x, data_y, msg=True):
+        """Restores contrast (by resetting shift array).  Does not undo
+        a rotated or inverted color map.
+        """
+        if self.cancmap:
+            msg = self.settings.get('msg_cmap', msg)
+            self.restore_contrast(viewer, msg=msg)
+        return True
+
     def kp_cmap_reset(self, viewer, event, data_x, data_y, msg=True):
-        self._reset_cmap(viewer, msg)
+        """Sets the color map to the default and restores contrast.
+        """
+        if self.cancmap:
+            self._to_default_cmap(viewer, msg)
         return True
 
     def kp_cmap_restore(self, viewer, event, data_x, data_y, msg=True):
-        self.restore_colormap(viewer, msg)
+        if self.cancmap:
+            self.restore_colormap(viewer, msg)
         return True
 
     def kp_cmap_invert(self, viewer, event, data_x, data_y, msg=True):

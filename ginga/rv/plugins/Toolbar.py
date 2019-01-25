@@ -119,8 +119,10 @@ class Toolbar(GingaPlugin.GlobalPlugin):
              self.reset_all_transforms_cb),
             ("AutoLevels", 'button', 'auto_cuts_48', "Auto cut levels",
              self.auto_levels_cb),
-            ("ResetContrast", 'button', 'reset_contrast_48', "Reset contrast",
-             self.reset_contrast_cb),
+            ("RestoreContrast", 'button', 'reset_contrast_48', "Restore contrast adjustment",
+             self.restore_contrast_cb),
+            ("RestoreColormap", 'button', 'reset_cmap_48', "Restore inverted or rotated colormap",
+             self.restore_colormap_cb),
             ("---",),
             ("Preferences", 'button', 'settings_48', "Set channel preferences",
              lambda w: self.start_plugin_cb('Preferences')),
@@ -132,6 +134,8 @@ class Toolbar(GingaPlugin.GlobalPlugin):
              lambda w: self.start_global_plugin_cb('Header')),
             ("Zoom", 'button', 'microscope_48', "Magnify detail",
              lambda w: self.start_global_plugin_cb('Zoom')),
+            ("ColormapPicker", 'button', 'cmap_48', "Pick a colormap for the active channel",
+             lambda w: self.start_global_plugin_cb('ColormapPicker')),
             ):  # noqa
 
             name = tup[0]
@@ -190,9 +194,14 @@ class Toolbar(GingaPlugin.GlobalPlugin):
         bd.kp_center(view, 'x', 0.0, 0.0)
         return True
 
-    def reset_contrast_cb(self, w):
+    def restore_contrast_cb(self, w):
         view, bd = self._get_view()
         bd.kp_contrast_restore(view, 'x', 0.0, 0.0)
+        return True
+
+    def restore_colormap_cb(self, w):
+        view, bd = self._get_view()
+        bd.kp_cmap_restore(view, 'x', 0.0, 0.0)
         return True
 
     def auto_levels_cb(self, w):
